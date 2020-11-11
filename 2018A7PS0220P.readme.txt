@@ -1,0 +1,11 @@
+Assingment created for HCI Project Septmeber-November.
+
+In order to view this project, open "2018A7PS0220P.html" in Google Chrome(preferable), and ensure that the browser remains in fullscreen mode.
+
+In order to open the html file in Chrome, left-click on the html file, then right-click it. Under "Open With", there should be an option to open it using Google Chrome(if installed).
+
+The interaction with the webpage is sufficiently described in terms of functionality in the report attached within this same folder (2018A7PS0220P_D3.docx).
+
+Please ensure that "2018A7PS0220P.im1.jpg", "2018A7PS0220P.im2.jpg", "2018A7PS0220P.im3.jpg" are all stored within the same folder along with "2018A7PS0220P.html" and 2018A7PS0220P.css".
+
+End of README file.

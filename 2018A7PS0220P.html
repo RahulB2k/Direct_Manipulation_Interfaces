@@ -1,0 +1,439 @@
+<html>
+	<head>
+		<script>
+		let root=document.documentElement;
+		function changetext(i){
+		switch(i){
+		case 1:
+			root.style.setProperty("--font", "Papyrus, sans-serif");
+			break;
+		case 2:
+			root.style.setProperty("--font", "Copperplate Gothic Light, sans-serif");
+			break;
+		case 3:
+			root.style.setProperty("--font", "Segoe UI, sans-serif");
+			break;
+		case 4:
+			root.style.setProperty("--font", "Candara, sans-serif");
+			break;
+			}
+		}
+		
+		function changetheme(i){
+		switch(i){
+		case 1:
+			root.style.setProperty("--bg-color", "white");
+			root.style.setProperty("--item-bg-bgcolor", "#F0F0F0");
+			root.style.setProperty("--item-fd-color", "rgba(0,255,255,0.85)");
+			root.style.setProperty("--fontcolor", "black");
+			root.style.setProperty("--add-color", "lime");
+			root.style.setProperty("--cart-color", "#C8EC69");
+			root.style.setProperty("--palettecolor", "#F0F0F0");
+			break;
+		case 2:
+			root.style.setProperty("--bg-color", "#151515");
+			root.style.setProperty("--item-bg-bgcolor", "#353535");
+			root.style.setProperty("--item-fd-color", "rgba(0,0,139,0.85)");
+			root.style.setProperty("--fontcolor", "#F0F0F0");
+			root.style.setProperty("--add-color", "lime");
+			root.style.setProperty("--cart-color", "#154F30");
+			root.style.setProperty("--palettecolor", "#353535");
+			break;
+		case 3:
+			root.style.setProperty("--bg-color", "rgb(153,217,234)");
+			root.style.setProperty("--item-bg-bgcolor", "#C68642");
+			root.style.setProperty("--item-fd-color", "rgba(230,0,0,0.85)");
+			root.style.setProperty("--fontcolor", "black");
+			root.style.setProperty("--add-color", "lime");
+			root.style.setProperty("--cart-color", "rgb(55,40,157)");
+			root.style.setProperty("--palettecolor", "rgb(181,230,39)");
+			break;
+			}
+		}
+		
+		function inc_cart(i){
+			var amt=parseInt(document.getElementById("qty"+i).innerHTML);
+			var cost=parseInt(document.getElementById("amt"+i).innerHTML);
+			var price=parseInt(document.getElementById("price"+i).innerHTML);
+			document.getElementById("qty"+i).innerHTML=amt+1;
+			document.getElementById("amt"+i).innerHTML=cost+price;
+			document.getElementById("tot_amt").innerHTML=parseInt(document.getElementById("tot_amt").innerHTML)+price;
+		}
+		
+		function dec_cart(i){
+			var amt=parseInt(document.getElementById("qty"+i).innerHTML);
+			var cost=parseInt(document.getElementById("amt"+i).innerHTML);
+			var price=parseInt(document.getElementById("price"+i).innerHTML);
+			if(amt>0){
+				document.getElementById("qty"+i).innerHTML=amt-1;
+				document.getElementById("amt"+i).innerHTML=cost-price;
+				document.getElementById("tot_amt").innerHTML=parseInt(document.getElementById("tot_amt").innerHTML)-price;
+			}
+			if(amt<2){
+				delete_item(i);
+			}
+		}
+		
+		function decrement(i){
+			var x=parseInt(document.getElementById("test"+i).innerHTML);
+			if(x>0){
+				x--;
+			}
+			document.getElementById("test"+i).innerHTML=x;
+			document.getElementById("add_cart"+i).innerHTML="Add to Cart("+x+")";
+			if(x<1){
+			document.getElementById("add_cart"+i).classList.remove("active");
+			document.getElementById("add_cart"+i).innerHTML="Add to Cart";
+			}
+		}
+		
+		function increment(i){
+			var x=parseInt(document.getElementById("test"+i).innerHTML);
+			if(x<10){
+				x++;
+			}
+			document.getElementById("test"+i).innerHTML=x;
+			if(x>0){
+			document.getElementById("add_cart"+i).innerHTML="Add to Cart("+x+")";
+			document.getElementById("add_cart"+i).classList.add("active");
+			}
+		}
+		
+		function add_to_cart(i){
+			var add=parseInt(document.getElementById("test"+i).innerHTML);
+			var amt=parseInt(document.getElementById("qty"+i).innerHTML);
+			var cost=parseInt(document.getElementById("amt"+i).innerHTML);
+			document.getElementById("qty"+i).innerHTML=amt+add;
+			add=add*parseInt(document.getElementById("price"+i).innerHTML);
+			document.getElementById("amt"+i).innerHTML=cost+add;
+			document.getElementById("tot_amt").innerHTML=parseInt(document.getElementById("tot_amt").innerHTML)+add;
+			document.getElementById("add_cart"+i).innerHTML="Added!"
+			document.getElementById("add_cart"+i).classList.remove("active");
+			document.getElementById("test"+i).innerHTML="0";
+			document.getElementById("cart"+i).classList.remove("trashed_item");
+			document.getElementById("cart"+i).classList.add("active_item");
+			document.getElementById("amount_holder").classList.remove("trashed_item");
+			document.getElementById("amount_holder").classList.add("active_item");
+			document.getElementById("empty_cart_container").classList.remove("empty_active");
+			document.getElementById("empty_cart_container").classList.add("empty_inactive");
+			document.getElementById("finalbuttons").classList.add("active_finalbuttons");
+		}
+		
+		function warn_delete(i){
+			document.getElementById("cart"+i).classList.add("trash_item");
+		}
+		
+		function restore_delete(i){
+			document.getElementById("cart"+i).classList.remove("trash_item");
+		}
+		
+		function delete_item(i){
+			document.getElementById("qty"+i).innerHTML=0;
+			var cost=parseInt(document.getElementById("amt"+i).innerHTML);
+			document.getElementById("amt"+i).innerHTML=0;
+			document.getElementById("tot_amt").innerHTML=parseInt(document.getElementById("tot_amt").innerHTML)-cost;
+			document.getElementById("cart"+i).classList.remove("active_item");
+			document.getElementById("cart"+i).classList.add("trashed_item");
+			document.getElementById("cart"+i).classList.remove("trash_item");
+			if(parseInt(document.getElementById("tot_amt").innerHTML)==0){
+				document.getElementById("amount_holder").classList.remove("active_item");
+				document.getElementById("amount_holder").classList.add("trashed_item");
+				document.getElementById("empty_cart_container").classList.remove("empty_inactive");
+				document.getElementById("empty_cart_container").classList.add("empty_active");
+				document.getElementById("finalbuttons").classList.remove("active_finalbuttons");
+			}
+		}
+		var abort=null;
+
+		function slideleft(){
+			var number=document.getElementsByClassName("slides")[0].className.slice(-1);
+			switch(number){
+				case "1":
+				slide3();
+				break;
+				case "2":
+				slide1();
+				break;
+				case "3":
+				slide2();
+				break;
+			}
+		}
+
+		function slideright(){
+			var number=document.getElementsByClassName("slides")[0].className.slice(-1);
+			switch(number){
+				case "1":
+				slide2();
+				break;
+				case "2":
+				slide3();
+				break;
+				case "3":
+				slide1();
+				break;
+			}
+		}
+
+		function slide1(){
+			clearTimeout(abort);
+			document.getElementsByClassName("slides")[0].className="slides slide1";
+			document.getElementById("dot1").className="dot active2";
+			document.getElementById("dot3").className="dot";
+			document.getElementById("dot2").className="dot";
+			document.getElementById("text1").className="slidetext active2";
+			abort=setTimeout(slide2,5000);
+		}
+
+		function slide2(){
+			clearTimeout(abort);
+			document.getElementsByClassName("slides")[0].className="slides slide2";
+			document.getElementById("dot2").className="dot active2";
+			document.getElementById("dot3").className="dot";
+			document.getElementById("dot1").className="dot";
+			document.getElementById("text2").className="slidetext active2";
+			abort=setTimeout(slide3,5000);
+		}
+
+		function slide3(){
+			clearTimeout(abort);
+			document.getElementsByClassName("slides")[0].className=" slides slide3";
+			document.getElementById("dot3").className="dot active2";
+			document.getElementById("dot1").className="dot";
+			document.getElementById("dot2").className="dot";
+			document.getElementById("text3").className="slidetext active2";
+			abort=setTimeout(slide1,5000);
+		}
+		
+		function purchase(){
+			delete_item(1);
+			delete_item(2);
+			delete_item(3);
+			alert("Thank you for your purchase!");
+		}
+		
+		function deletecart(){
+			delete_item(1);
+			delete_item(2);
+			delete_item(3);
+		}
+		</script>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="2018A7PS0220P.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<title>
+			HCI Project
+		</title>
+	</head>
+	<body onload="slide1();">
+	<div class="slideshow">
+		<div class="slides">
+			<div class="w3-red slide" id="slide1">
+				<div class="slidetext" id="text1">
+				Apples
+				</div>
+			</div>
+			<div class="w3-red slide" id="slide2">
+				<div class="slidetext" id="text2">
+				Bananas
+				</div>
+			</div>
+			<div class="w3-green slide" id="slide3">
+				<div class="slidetext" id="text3">
+				Oranges
+				</div>
+			</div>
+		</div>
+		<div style="position:absolute; left:50%; bottom:8px; margin-left:-33.5px;">
+			<div class="dot" id="dot1" onclick="slide1();">
+			</div>
+			<div class="dot" id="dot2" onclick="slide2();">
+			</div>
+			<div class="dot" id="dot3" onclick="slide3();">
+			</div>
+		</div>
+		<div class="L" onclick="slideleft();">
+		<svg width="50px" height="50px" viewBox="0 0 16 16" class="bi bi-chevron-compact-left" fill="white" xmlns="http://www.w3.org/2000/svg" style="transform:translateY(140px);" id="LR">
+			<path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+		</svg>
+		</div>
+		<div class="R" onclick="slideright();">
+		<svg width="50px" height="50px" viewBox="0 0 16 16" class="bi bi-chevron-compact-right" fill="white" xmlns="http://www.w3.org/2000/svg" style="transform:translateY(140px);" id="RR">
+			<path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+		</svg>
+		</div>
+	</div>
+	<div class="lower_half_container">
+	<div class="palette_container">
+		<div class="palette_text">Font Palette</div>
+		<div class="palette_type_container" id="textt1" onclick="changetext(1);">
+			Font 1
+		</div>
+		<div class="palette_type_container" id="textt2" onclick="changetext(2);">
+			Font 2
+		</div>
+		<div class="palette_type_container" id="textt3" onclick="changetext(3);">
+			Font 3
+		</div>
+		<div class="palette_type_container" id="textt4" onclick="changetext(4);">
+			Font 4
+		</div>
+		<div class="palette_text">Theme Palette</div>
+		<div class="palette_type_container" id="theme1" onclick="changetheme(1);">
+			Light
+		</div>
+		<div class="palette_type_container" id="theme2" onclick="changetheme(2);">
+			Dark
+		</div>
+		<div class="palette_type_container" id="theme3" onclick="changetheme(3);">
+			Colorful
+		</div>
+		
+	</div>	
+	<div class="e_commerce_container">
+		<div class="main_item_layout">
+			<div class="full_item_container">
+				<div class="add_to_cart" id="add_cart1" onclick="add_to_cart(1);">
+					Add to cart
+				</div>
+				<div class="item_container">
+					<div class="item_desc">
+						<b><center><font size=7>Apple</font></center></b><br>
+						A popular fruit, containing antioxidants, vitamins, dietary fiber, and a range of other nutrients.
+					</div>
+					<div class="item_cost">
+						Price:<br>
+						<span id="price1" style="font-size:48;">
+							175
+						</span>
+						Rs. (per kg)
+						<br>
+						<div class="qty">Add quantity (kg):</div>
+						<div class="item_add_to_cart">
+							<i class="glyphicon glyphicon-minus" onclick="decrement(1);" style="cursor:pointer;"></i>
+							<span id="test1">0</span>
+							<i class="glyphicon glyphicon-plus" onclick="increment(1);" style="cursor:pointer;"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			<div class="full_item_container">
+				<div class="add_to_cart" id="add_cart2" onclick="add_to_cart(2);">
+					Add to cart
+				</div>
+				<div class="item_container">
+					<div class="item_desc">
+						<b><center><font size=7>Banana</font></center></b><br>
+						A healthy source of fiber, potassium, vitamin B6, vitamin C, and various antioxidants and phytonutrients.
+					</div>
+					<div class="item_cost">
+						Price:<br>
+						<span id="price2" style="font-size:48;">
+							40
+						</span>
+						Rs. (per dozen)
+						<br>
+						<div class="qty">Add quantity (dozen):</div>
+							<div class="item_add_to_cart">
+								<i class="glyphicon glyphicon-minus" onclick="decrement(2);" style="cursor:pointer;"></i>
+								<span id="test2">0</span>
+								<i class="glyphicon glyphicon-plus" onclick="increment(2);" style="cursor:pointer;"></i>
+							</div>
+					</div>
+				</div>
+			</div>
+	
+			<div class="full_item_container">
+				<div class="add_to_cart" id="add_cart3" onclick="add_to_cart(3);">
+					Add to cart
+				</div>
+				<div class="item_container">
+					<div class="item_desc">
+					<b><center><font size=7>Orange</font></center></b><br>
+						A healthy source of fiber, vitamin C, thiamine, folate, and antioxidants.
+					</div>
+					<div class="item_cost">
+						Price:<br>
+						<span id="price3" style="font-size:48;">
+							100
+						</span>
+						Rs. (per kg)
+						<br>
+						<div class="qty">Add quantity (kg):</div>
+						<div class="item_add_to_cart">
+							<i class="glyphicon glyphicon-minus" onclick="decrement(3);" style="cursor:pointer;"></i>
+							<span id="test3">0</span>
+							<i class="glyphicon glyphicon-plus" onclick="increment(3);" style="cursor:pointer;"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	
+		<div class="full_cart_container">
+		<div class="finalize_cart" id="finalbuttons">
+		<div class="checkout" onclick="purchase();">
+		<svg width="1.25em" height="1.25em" viewBox="0 0 16 16" class="bi bi-cart-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+			<path fill-rule="evenodd" d="M11.354 5.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+		</svg>
+			Check-out
+		</div>
+		<div class="cancelcart" onclick="deletecart();">
+		<svg width="1.25em" height="1.25em" viewBox="0 0 16 16" class="bi bi-cart-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+			<path fill-rule="evenodd" d="M6.646 5.646a.5.5 0 0 1 .708 0L8.5 6.793l1.146-1.147a.5.5 0 0 1 .708.708L9.207 7.5l1.147 1.146a.5.5 0 0 1-.708.708L8.5 8.207 7.354 9.354a.5.5 0 1 1-.708-.708L7.793 7.5 6.646 6.354a.5.5 0 0 1 0-.708z"/>
+		</svg>
+			Delete Cart
+		</div>
+		</div>
+		<div class="empty_cart" id="empty_cart_container">
+		<center>Add some items to your cart and they'll appear here!</center>
+		</div>
+		<div class="cartlabel">
+			<b></b>
+			<b>Name</b>
+			<b>Quantity</b>
+			<b>Cost</b>
+		</div>
+		<div class="cart_container trashed_item" id="cart1">
+			<i class="glyphicon glyphicon-trash trash" onmouseover="warn_delete(1);" onmouseout="restore_delete(1);" onclick="delete_item(1);" style="cursor:pointer; padding:10px;"></i>
+			<span style="padding:7.5px;">Apple</span>
+			<span>
+				<i class="glyphicon glyphicon-minus" onclick="dec_cart(1);" style="cursor:pointer; padding:10px;"></i>
+				<span id="qty1">0</span>
+				<i class="glyphicon glyphicon-plus" onclick="inc_cart(1);" style="cursor:pointer; padding:10px;"></i>
+			</span>
+			<span id="amt1" style="padding:7.5px;">0</span>
+		</div>
+		<div class="cart_container trashed_item" id="cart2">
+			<i class="glyphicon glyphicon-trash trash" onmouseover="warn_delete(2);" onmouseout="restore_delete(2);" onclick="delete_item(2);" style="cursor:pointer; padding:10px;"></i>
+			<span style="padding:7.5px;">Banana</span>
+			<span>
+				<i class="glyphicon glyphicon-minus" onclick="dec_cart(2);" style="cursor:pointer; padding:10px;"></i>
+				<span id="qty2">0</span>
+				<i class="glyphicon glyphicon-plus" onclick="inc_cart(2);" style="cursor:pointer; padding:10px;"></i>
+			</span>
+			<span id="amt2" style="padding:7.5px;">0</span>
+		</div>
+		<div class="cart_container trashed_item" id="cart3">
+			<i class="glyphicon glyphicon-trash trash" onmouseover="warn_delete(3);" onmouseout="restore_delete(3);" onclick="delete_item(3);" style="cursor:pointer; padding:10px;"></i>
+			<span style="padding:7.5px;">Orange</span>
+			<span>
+				<i class="glyphicon glyphicon-minus" onclick="dec_cart(3);" style="cursor:pointer; padding:10px;"></i>
+				<span id="qty3">0</span>
+				<i class="glyphicon glyphicon-plus" onclick="inc_cart(3);" style="cursor:pointer; padding:10px;"></i>
+			</span>
+			<span id="amt3" style="padding:7.5px;">0</span>
+		</div>
+		<div class="total_amount trashed_item" id="amount_holder">
+			<span style="padding:7.5px;">Total Amount:</span>
+			<span id="tot_amt" style="padding:7.5px;">0</span>
+		</div>
+	</div>
+	</div>
+	</div>
+	</body>
+</html>
